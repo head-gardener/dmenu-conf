@@ -1,6 +1,7 @@
 { lib
 , rustPlatform
 , fetchFromGitHub
+, pipewire
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,6 +14,12 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "sha256-r/6AAZKZgPYUGic/Dag7OT5RtH+RKgEkJVWxsO5VGZ0=";
   };
+
+  postPatch = ''
+    substituteInPlace ./src/main.rs \
+      --replace-fail '"pw-dump"' '"${pipewire}/bin/pw-dump"' \
+      --replace-fail '"pw-cli"' '"${pipewire}/bin/pw-cli"'
+  '';
 
   cargoSha256 = "sha256-srwbrMBUJz/Xi+Hk2GY9oo4rcTfKl/r146YWSSx6dew=";
 
